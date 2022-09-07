@@ -8,6 +8,7 @@
 
 // module.exports = router;
 const express = require('express');
+const redis = require('../redis')
 const router = express.Router();
 
 const configs = require('../util/config')
@@ -23,5 +24,7 @@ router.get('/', async (req, res) => {
     visits
   });
 });
+
+//REDIS_URL=redis://host:6379 MONGO_URL=mongodb://localhost:3456/the_database npm run dev
 
 module.exports = router;
