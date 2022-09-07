@@ -1,5 +1,5 @@
 const express = require('express');
-const { Todo } = require('../mongo')
+const { Todo } = require('../mongo/index')
 const router = express.Router();
 
 /* GET todos listing. */
@@ -35,12 +35,17 @@ singleRouter.delete('/', async (req, res) => {
 
 /* GET todo. */
 singleRouter.get('/', async (req, res) => {
-  res.sendStatus(405); // Implement this
+  const todo = req.todo
+  res.json(todo)
 });
 
 /* PUT todo. */
 singleRouter.put('/', async (req, res) => {
-  res.sendStatus(405); // Implement this
+  const body = req.body;
+  const todo = { ...body };
+  const updatedTodo = await Todo.findByIdAndUpdate(req.todo._id,todo,{new: true});
+  console.log(`updatedTodo here is ${updatedTodo}`)
+  res.json(updatedTodo)
 });
 
 router.use('/:id', findByIdMiddleware, singleRouter)
