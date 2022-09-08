@@ -1,5 +1,6 @@
 const express = require('express');
-const { Todo } = require('../mongo/index')
+const { Todo } = require('../mongo/index');
+const { getAsync, setAsync } = require('../redis');
 const router = express.Router();
 
 /* GET todos listing. */
@@ -8,12 +9,20 @@ router.get('/', async (_, res) => {
   res.send(todos);
 });
 
+router.get('/statistics', async (_, res) => {
+  const added_todos = await getAsync("added_todos") === null ? await Todo.collection.countDocuments() : await getAsync("added_todos")
+  res.json({ added_todos });
+});
+
 /* POST todo to listing. */
 router.post('/', async (req, res) => {
   const todo = await Todo.create({
     text: req.body.text,
     done: false
   })
+  const collections = await getAsync('added_todos') === null ? await Todo.collection.countDocuments() : await getAsync('added_todos') + 1;
+  await setAsync('added_todos', collections)
+  console.log(`collections here is ${collections}`)
   res.send(todo);
 });
 

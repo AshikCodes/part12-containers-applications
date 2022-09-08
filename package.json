@@ -1,6 +1,7 @@
 {
   "dependencies": {
     "mongoose": "^6.5.4",
-    "nodemon": "^2.0.19"
+    "nodemon": "^2.0.19",
+    "redis": "^3.1.2"
   }
 }
